@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,ListGroup,ListGroupItem } from 'reactstrap';
 import '../App.css'
+import { func } from 'prop-types';
 
-class DishDetail extends Component {
- 
-    constructor(props) {
-        super(props)
-    }
-
-    renderDish(dish) {
+    function RenderDish({dish}) {
 
         const rr1 = 
                     <Card>
@@ -27,7 +22,7 @@ class DishDetail extends Component {
         return rr1;
     }
 
-    renderComments(arrayComm) {
+    function RenderComments({arrayComm}) {
 
        
         const commen = arrayComm.map((ele)=> {
@@ -55,14 +50,15 @@ class DishDetail extends Component {
         
     }
 
-    render() {
+    function DishDetail(props) {
+    
         
-        const dish = this.props.val
+        const dish = props.val
         if(dish!=null) {
             
-            const comments = this.renderDish(dish)
+            const comments = <RenderDish dish={dish}></RenderDish>
             
-            const mergedThing = this.renderComments(dish["comments"])
+            const mergedThing = <RenderComments arrayComm = {dish["comments"]}></RenderComments>
             
             return (
                 <div className="container">
@@ -91,6 +87,6 @@ class DishDetail extends Component {
 
     }
 
-}
+
 
 export default DishDetail;
