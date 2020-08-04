@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,ListGroup,ListGroupItem } from 'reactstrap';
+import '../App.css'
 
 class DishDetail extends Component {
  
@@ -64,8 +65,9 @@ class DishDetail extends Component {
             const mergedThing = this.renderComments(dish["comments"])
             
             return (
-                <div className="row">
+                <div className="container">
     
+                    <div className="row">
                     <div className="col-12 col-md-5 m-1">
                         {comments}
                     </div>
@@ -73,6 +75,7 @@ class DishDetail extends Component {
                     <div className="col-12 col-md-5 m-1">
                     <h4>Comments</h4>
                         {mergedThing}
+                    </div>
                     </div>
     
                 </div>
