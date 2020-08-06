@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,ListGroup,ListGroupItem } from 'reactstrap';
+import { Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,ListGroup,ListGroupItem,Breadcrumb,BreadcrumbItem } from 'reactstrap';
 import '../App.css'
+import { Link } from 'react-router-dom'
 import { func } from 'prop-types';
 
     function RenderDish({dish}) {
@@ -57,11 +58,17 @@ import { func } from 'prop-types';
         if(dish!=null) {
             
             const comments = <RenderDish dish={dish}></RenderDish>
-            
-            const mergedThing = <RenderComments arrayComm = {dish["comments"]}></RenderComments>
-            
+            console.log(props.comments)
+            const mergedThing = <RenderComments arrayComm = {props.comments}></RenderComments>
+          
             return (
                 <div className="container">
+                    
+                        <Breadcrumb>
+                            <BreadcrumbItem>< Link to="/home">Home</ Link></BreadcrumbItem>
+                            <BreadcrumbItem>< Link to="/menu"> Menu </ Link></BreadcrumbItem>
+                            <BreadcrumbItem active> {dish.name} </BreadcrumbItem>
+                        </Breadcrumb>
     
                     <div className="row">
                     <div className="col-12 col-md-5 m-1">
@@ -73,6 +80,7 @@ import { func } from 'prop-types';
                         {mergedThing}
                     </div>
                     </div>
+                    
     
                 </div>
             )
