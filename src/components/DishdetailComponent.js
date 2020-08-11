@@ -1,11 +1,36 @@
-import React from 'react';
-import { Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,ListGroup,ListGroupItem,Breadcrumb,BreadcrumbItem } from 'reactstrap';
+import React,{Component} from 'react';
+import { Card,Col,Row,Label, CardImg,CardImgOverlay,Modal,ModalBody,ModalHeader,CardText,CardBody,CardTitle,ListGroup,ListGroupItem,Breadcrumb,BreadcrumbItem,Button } from 'reactstrap';
 import '../App.css'
+import {LocalForm,Control,Errors,Option} from 'react-redux-form'
 import { Link } from 'react-router-dom'
-import { func } from 'prop-types';
 
-    function RenderDish({dish}) {
+const minLength = (len) => (val) => val && (val.length >= len);
+const maxLength = (len)=> (val)=> val && (val.length<=len)
+const required = (val)=> val && val.length
 
+
+class DishDetail extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            isModalOpen: false
+        }
+
+        this.RenderComments = this.RenderComments.bind(this)
+        this.RenderDish = this.RenderDish.bind(this)
+        this.toggleModal = this.toggleModal.bind(this)
+
+    }
+
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        })
+    }
+
+    RenderDish(dish) {
         const rr1 = 
                     <Card>
                         <CardImg width="100%" src={dish.image} alt={dish.name}/>
@@ -23,7 +48,8 @@ import { func } from 'prop-types';
         return rr1;
     }
 
-    function RenderComments({arrayComm}) {
+
+    RenderComments(arrayComm) {
 
        
         const commen = arrayComm.map((ele)=> {
@@ -51,16 +77,14 @@ import { func } from 'prop-types';
         
     }
 
-    function DishDetail(props) {
-    
-        
-        const dish = props.val
+    render() {
+
+        const dish = this.props.val
         if(dish!=null) {
             
-            const comments = <RenderDish dish={dish}></RenderDish>
-            console.log(props.comments)
-            const mergedThing = <RenderComments arrayComm = {props.comments}></RenderComments>
-          
+            const comments = this.RenderDish(dish)
+            
+            const mergedThing = this.RenderComments(this.props.comments)
             return (
                 <div className="container">
                     
@@ -78,10 +102,103 @@ import { func } from 'prop-types';
                     <div className="col-12 col-md-5 m-1">
                     <h4>Comments</h4>
                         {mergedThing}
+                        <Button onClick={this.toggleModal}><i className="fa fa-edit fa-lg">Submit Comment</i></Button>
+
                     </div>
+
+                    
                     </div>
+                   
+                    
                     
     
+                
+
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                    <LocalForm>
+
+                        
+                            
+                            
+                            <Row>
+                                <Label htmlFor="rating" md={2}>Rating</Label><br></br>
+                            </Row>
+                            <Row>
+                                <Col md={12}>
+                                <Control.select model='.rating' type="select"
+                                    id="rating" name="rating" className="form-control"
+                                    validators = {{
+                                        required,minLength :minLength(3)
+                                    }}
+                                    >
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+
+                                    
+                                </Control.select>
+                                
+                                
+                                </Col>
+                            </Row>
+
+                            <Row>
+                                <Label htmlFor="name" md={12}>Your Name</Label><br></br>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                <Control.text model='.name' type="text" 
+                                    id="name" className="form-control" 
+                                    validators = {{
+                                        required,minLength: minLength(3),maxLength: maxLength(15)
+                                    }}
+                                    >
+                                    
+                                    
+                                </Control.text>
+                                <Errors className="text-danger"
+                                    show="touched" model=".name"
+                                    messages= {{
+                                        required: "Required ",
+                                        minLength: "Must be greater than 2 characters ",
+                                        maxLength: "Must be less than or equal to 15 characters"
+                                    }}
+                                ></Errors>
+                                
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Label htmlFor="comment" md={12}>Comment</Label><br></br>
+                            </Row>
+                            <Row className="form-group">
+                                <Col md={12}>
+                                <Control.textarea model='.comment' type="text" rows='6' className="form-control"
+                                    id="name">
+                                    
+                                    
+                                </Control.textarea>
+                                
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <Col md={{size:3}}>
+                                <Button type="submit" color="primary">
+                                    Submit
+                                </Button>
+                                </Col>
+                            </Row>
+                            
+                        
+
+
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
                 </div>
             )
             
@@ -93,8 +210,16 @@ import { func } from 'prop-types';
         }
         
 
+
+
     }
 
 
+
+
+
+
+
+}
 
 export default DishDetail;
