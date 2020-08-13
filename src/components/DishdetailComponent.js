@@ -4,9 +4,10 @@ import '../App.css'
 import {LocalForm,Control,Errors,Option} from 'react-redux-form'
 import { Link } from 'react-router-dom'
 
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
-const maxLength = (len)=> (val)=> val && (val.length<=len)
-const required = (val)=> val && val.length
+const isNumber = (val) => !isNaN(Number(val));
 
 
 class DishDetail extends Component {
@@ -21,6 +22,7 @@ class DishDetail extends Component {
         this.RenderComments = this.RenderComments.bind(this)
         this.RenderDish = this.RenderDish.bind(this)
         this.toggleModal = this.toggleModal.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
 
     }
 
@@ -46,6 +48,11 @@ class DishDetail extends Component {
                     </Card>
 
         return rr1;
+    }
+
+    handleSubmit(values) {
+        var val = values
+        this.props.addComment(this.props.val.id,val.rating,val.name,val.comment)
     }
 
 
@@ -117,7 +124,7 @@ class DishDetail extends Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
-                    <LocalForm>
+                    <LocalForm onSubmit={(values)=>this.handleSubmit(values)}>
 
                         
                             
@@ -129,9 +136,7 @@ class DishDetail extends Component {
                                 <Col md={12}>
                                 <Control.select model='.rating' type="select"
                                     id="rating" name="rating" className="form-control"
-                                    validators = {{
-                                        required,minLength :minLength(3)
-                                    }}
+                                    
                                     >
                                     <option value="1" selected>1</option>
                                     <option value="2">2</option>
@@ -152,7 +157,7 @@ class DishDetail extends Component {
                             <Row className="form-group">
                                 <Col md={12}>
                                 <Control.text model='.name' type="text" 
-                                    id="name" className="form-control" 
+                                    id="name" className="form-control" name="author" 
                                     validators = {{
                                         required,minLength: minLength(3),maxLength: maxLength(15)
                                     }}
@@ -177,7 +182,7 @@ class DishDetail extends Component {
                             <Row className="form-group">
                                 <Col md={12}>
                                 <Control.textarea model='.comment' type="text" rows='6' className="form-control"
-                                    id="name">
+                                    id="name" name="message">
                                     
                                     
                                 </Control.textarea>
@@ -197,6 +202,11 @@ class DishDetail extends Component {
 
 
                         </LocalForm>
+
+
+
+
+
                     </ModalBody>
                 </Modal>
                 </div>

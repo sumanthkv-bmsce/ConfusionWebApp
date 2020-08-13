@@ -8,7 +8,6 @@ const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 const isNumber = (val) => !isNaN(Number(val));
-const validEmail = (val)=> /^[A-Z0-9._%+-]+@\.[A-Z]{2,4}$/i.test(val)
 
 class Contact extends Component {
 
@@ -30,7 +29,7 @@ class Contact extends Component {
     }
 
     
-    Input
+    
     render() {
 
         return(
@@ -183,7 +182,7 @@ class Contact extends Component {
                                     id="email" name="email" className="form-control"
                                      placeholder="Enter email"
                                      validators={{
-                                         required,validEmail
+                                         required
                                      }}
                                      
                                      ></Control.text>
@@ -191,8 +190,7 @@ class Contact extends Component {
                                      show="touched" 
                                      model=".email"
                                      messages={{
-                                         required: "Required",
-                                         validEmail: "Must be a valid email "
+                                         required: "Required"
                                      }}
                                      >
                                          
